@@ -24,6 +24,8 @@ let entryCounter = 0;
 		for(let i = 0; i <= 500; i++) {
 			entryCounter++;
 			await selectEntries(page);
+			await submitEntry(page);
+			await anotherEntry(page);
 			await page.screenshot({path: "./screenshots/test.png"});
 		}
 		page.close();
@@ -50,11 +52,12 @@ async function selectEntries(page) {
 		log(`Multiple entries for entry #${entryCounter} selected.`);
 		break;
 	case "random":
-		await selectRandomEntry(page);
-		log(`Random entry for entry #${entryCounter} selected.`);
+		// eslint-disable-next-line no-case-declarations
+		const entry = await selectRandomEntry(page);
+		log(`Random entry ${entry} for entry #${entryCounter} selected.`);
 		break;
 	}
-	await wait(5);
+	await wait(0.5);
 }
 
 async function selectSingleEntry(page, entry) {
@@ -72,6 +75,20 @@ async function selectRandomEntry(page) {
 	let randomIndex = random(0, entriesToSelect.length);
 	let entry = entriesToSelect[randomIndex];
 	selectSingleEntry(page, entry);
+	return entry;
+}
+
+async function submitEntry(page) {
+	const submitButton = await page.waitForSelector(".freebirdFormviewerViewNavigationSubmitButton");
+	await submitButton.click();
+	log(`Submitted entry #${entryCounter}`);
+	await wait(0.5);
+}
+
+async function anotherEntry(page) {
+	const anotherEntryLink = await page.waitForSelector(".freebirdFormviewerViewResponseLinksContainer a");
+	await anotherEntryLink.click();
+	log("Return for another entry.");
 }
 
 async function wait(seconds) {
