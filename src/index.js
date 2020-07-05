@@ -3,6 +3,7 @@
 // Imports
 require("dotenv").config();
 const puppeteer = require("puppeteer");
+const fs = require("fs");
 
 // Environment const
 const formURL = process.env.FORM_URL;
@@ -14,6 +15,7 @@ const maxWaitTime = process.env.MAX_WAIT_TIME !== undefined ? parseInt(process.e
 
 // Global variables
 let entryCounter = 0;
+let saveInterval = undefined;
 
 (async () => {
 
@@ -37,6 +39,17 @@ let entryCounter = 0;
 		return;
 	}
 
+	log("I get starting with the voting and you have a happy day :3");
+
+	process.on("exit", () => {
+		clearInterval(saveInterval);
+		saveEntryCounter();
+		log("Good bye :3 I hope your vote has won :)");
+	});
+
+	loadEntryCounter();
+	saveInterval = setInterval(saveEntryCounter, 60 * 1000);
+
 	// eslint-disable-next-line no-constant-condition
 	while(true) {
 		const browser = await puppeteer.launch();
@@ -57,6 +70,7 @@ let entryCounter = 0;
 				await page.screenshot({path: "./screenshots/test.png"});
 			}
 		} catch (error) {
+			log("Oh no something went wrong :c But don't worry I start right away again :3");
 			logError(error);
 		}
 		page.close();
@@ -147,4 +161,22 @@ function getTimestamp() {
 
 function random(start, end) {
 	return Math.floor(Math.random() * (end - start)) + start;
+}
+
+function saveEntryCounter() {
+	if(!fs.existsSync("./data")) {
+		fs.mkdirSync("./data");
+	}
+	log("Save entry counter.");
+	const data = { counter: entryCounter };
+	fs.writeFileSync("./data/datastore.json", JSON.stringify(data), { encoding: "utf-8" });
+}
+
+function loadEntryCounter() {
+	if(fs.existsSync("./data/datastore.json")) {
+		log("Load entry counter.");
+		let data = fs.readFileSync("./data/datastore.json", { encoding: "utf-8" });
+		data = JSON.parse(data);
+		entryCounter = data.counter;
+	}
 }
