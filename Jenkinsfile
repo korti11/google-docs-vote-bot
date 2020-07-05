@@ -1,20 +1,27 @@
-node {
-    def app
-
-    stage('Checkout') {
-        checkout scm
+pipeline {
+    agent {
+        docker {
+            image "docker"
+        }
     }
+    stages {
+        def app
 
-    stage('Build image') {
-        app = docker.build("korti/google-forms-vote-bot")
-    }
+        stage('Checkout') {
+            checkout scm
+        }
 
-    stage('Push image') {
-        def packageJson = readJSON file: 'package.json'
+        stage('Build image') {
+            app = docker.build("korti/google-forms-vote-bot")
+        }
 
-        docker.withRegistry("docker.pkg.github.com", "github") {
-            app.push("${packageJson.version}")
-            app.push("latest")
+        stage('Push image') {
+            def packageJson = readJSON file: 'package.json'
+
+            docker.withRegistry("docker.pkg.github.com", "github") {
+                app.push("${packageJson.version}");
+                app.push("latest")
+            }
         }
     }
 }
