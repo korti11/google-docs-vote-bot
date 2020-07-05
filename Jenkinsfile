@@ -1,3 +1,5 @@
+def app
+
 pipeline {
     agent {
         docker {
@@ -5,8 +7,6 @@ pipeline {
         }
     }
     stages {
-        def app
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -15,17 +15,21 @@ pipeline {
 
         stage('Build image') {
             steps {
-                app = docker.build("korti/google-forms-vote-bot")
+                script {
+                    app = docker.build("korti/google-forms-vote-bot")
+                }
             }
         }
 
         stage('Push image') {
             steps {
-                def packageJson = readJSON file: 'package.json'
+                script {
+                    def packageJson = readJSON file: 'package.json'
 
-                docker.withRegistry("docker.pkg.github.com", "github") {
-                    app.push("${packageJson.version}");
-                    app.push("latest")
+                    docker.withRegistry("docker.pkg.github.com", "github") {
+                        app.push("${packageJson.version}");
+                        app.push("latest")
+                    }
                 }
             }
         }
