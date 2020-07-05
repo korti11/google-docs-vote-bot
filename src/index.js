@@ -21,12 +21,16 @@ let entryCounter = 0;
 		const page = await browser.newPage();
 		await page.goto(formURL);
 		await setViewport(page);
-		for(let i = 0; i <= 500; i++) {
-			entryCounter++;
-			await selectEntries(page);
-			await submitEntry(page);
-			await anotherEntry(page);
-			await page.screenshot({path: "./screenshots/test.png"});
+		try {
+			for(let i = 0; i <= 500; i++) {
+				entryCounter++;
+				await selectEntries(page);
+				await submitEntry(page);
+				await anotherEntry(page);
+				await page.screenshot({path: "./screenshots/test.png"});
+			}
+		} catch (error) {
+			logError(error);
 		}
 		page.close();
 		browser.close();
@@ -99,6 +103,10 @@ async function wait(seconds) {
 
 function log(message) {
 	console.log(`${getTimestamp()}: ${message}`);
+}
+
+function logError(message) {
+	console.error(`${getTimestamp()}: ${message}`);
 }
 
 function getTimestamp() {
