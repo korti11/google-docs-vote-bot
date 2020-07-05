@@ -1,6 +1,6 @@
 {
   "name": "google-docs-vote-bot",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A bot to automate google docs votes.",
   "main": "src/index.js",
   "scripts": {
