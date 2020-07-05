@@ -17,6 +17,26 @@ let entryCounter = 0;
 
 (async () => {
 
+	// Environment validation
+	if(!formURL.startsWith("https://docs.google.com/forms")) {
+		log("The given url is not a google docs form url.");
+		log(`Given: ${formURL}, Should: https://docs.google.com/forms/...`);
+		return;
+	} else if(["single", "multiple", "random"].indexOf(entryMode) === -1) {
+		log("The given entry mode is not supported.");
+		log(`Given: ${entryMode}, Should be one of: 'single', 'multiple' or 'random'`);
+		return;
+	} else if(entryMode === "single" && (entryToSelect === undefined || entryToSelect === "")) {
+		log("Single entry mode selected but the 'ENTRY' environment variable is empty.");
+		return;
+	} else if((entryMode === "multiple" || entryMode === "random") && (entriesToSelect === undefined || entriesToSelect.length === 0)) {
+		log("Multiple or random mode selected but the the 'ENTRIES' variable is either empty or the given array is empty.");
+		return;
+	} else if(minWaitTime > maxWaitTime) {
+		log(`The given min wait time: ${minWaitTime}s is bigger then the max wait time: ${maxWaitTime}s.`);
+		return;
+	}
+
 	// eslint-disable-next-line no-constant-condition
 	while(true) {
 		const browser = await puppeteer.launch();
