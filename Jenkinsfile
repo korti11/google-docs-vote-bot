@@ -20,11 +20,13 @@ pipeline {
         stage('Push image') {
             steps {
                 script {
-                    def packageJson = readJSON file: 'package.json'
+                    if(env.BRANCH_NAME == "release") {
+                        def packageJson = readJSON file: 'package.json'
 
-                    docker.withRegistry("https://docker.pkg.github.com", "github") {
-                        app.push("${packageJson.version}");
-                        app.push("latest")
+                        docker.withRegistry("https://docker.pkg.github.com", "github") {
+                            app.push("${packageJson.version}");
+                            app.push("latest")
+                        }
                     }
                 }
             }
