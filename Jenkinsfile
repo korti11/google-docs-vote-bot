@@ -1,11 +1,7 @@
 def app
 
 pipeline {
-    agent {
-        docker {
-            image "docker"
-        }
-    }
+    agent any
     stages {
         stage('Checkout') {
             steps {
