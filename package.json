@@ -1,0 +1,30 @@
+{
+  "name": "google-docs-vote-bot",
+  "version": "0.0.0",
+  "description": "A bot to automate google docs votes.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/korti11/google-docs-vote-bot.git"
+  },
+  "keywords": [
+    "bot",
+    "google-docs",
+    "votes"
+  ],
+  "author": "Korti",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/korti11/google-docs-vote-bot/issues"
+  },
+  "homepage": "https://github.com/korti11/google-docs-vote-bot#readme",
+  "dependencies": {
+    "puppeteer": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.4.0"
+  }
+}
