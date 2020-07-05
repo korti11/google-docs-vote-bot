@@ -22,7 +22,7 @@ pipeline {
                 script {
                     def packageJson = readJSON file: 'package.json'
 
-                    docker.withRegistry("docker.pkg.github.com", "github") {
+                    docker.withRegistry("https://docker.pkg.github.com", "github") {
                         app.push("${packageJson.version}");
                         app.push("latest")
                     }
