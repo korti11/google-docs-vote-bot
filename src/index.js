@@ -67,7 +67,6 @@ let saveInterval = undefined;
 				await selectEntries(page);
 				await submitEntry(page);
 				await anotherEntry(page);
-				await page.screenshot({path: "./screenshots/test.png"});
 			}
 		} catch (error) {
 			log("Oh no something went wrong :c But don't worry I start right away again :3");
