@@ -12,7 +12,7 @@ pipeline {
         stage('Build image') {
             steps {
                 script {
-                    app = docker.build("korti11/google-forms-vote-bot")
+                    app = docker.build("korti11/google-docs-vote-bot/google-forms-vote-bot")
                 }
             }
         }
