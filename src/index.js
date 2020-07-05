@@ -9,6 +9,8 @@ const formURL = process.env.FORM_URL;
 const entriesToSelect = process.env.ENTRIES !== undefined ? JSON.parse(process.env.ENTRIES) : undefined;
 const entryToSelect = process.env.ENTRY;
 const entryMode = process.env.ENTRY_MODE || "single";
+const minWaitTime = process.env.MIN_WAIT_TIME !== undefined ? parseInt(process.env.MIN_WAIT_TIME) : 1;
+const maxWaitTime = process.env.MAX_WAIT_TIME !== undefined ? parseInt(process.env.MAX_WAIT_TIME) : 2;
 
 // Global variables
 let entryCounter = 0;
@@ -24,6 +26,11 @@ let entryCounter = 0;
 		try {
 			for(let i = 0; i <= 500; i++) {
 				entryCounter++;
+
+				const waitTime = random(minWaitTime, maxWaitTime);
+				log(`Wait ${waitTime} seconds for entry #${entryCounter}`);
+				await wait(waitTime);
+
 				await selectEntries(page);
 				await submitEntry(page);
 				await anotherEntry(page);
