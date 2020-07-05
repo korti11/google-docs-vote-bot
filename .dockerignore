@@ -1,0 +1,7 @@
+data
+node_modules
+screenshots
+.env
+.eslintrc.json
+.git
+.gitignore
